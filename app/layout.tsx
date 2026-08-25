@@ -6,9 +6,10 @@ import './globals.css';
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
 const lora = Lora({ variable: '--font-lora', subsets: ['latin'] });
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://serenity-personal.misavenear.chatgpt.site';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(siteUrl),
   title: 'Serenity — Evidence-led investment research',
   description: 'Turn an investment idea into an evidence-based, falsifiable thesis you can continuously track.',
   openGraph: {
