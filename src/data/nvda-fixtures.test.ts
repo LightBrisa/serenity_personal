@@ -10,21 +10,21 @@ import {
   nvdaThesisVersions,
 } from './nvda-fixtures';
 
-describe('NVDA demo fixture integrity', () => {
-  it('matches the structured IdeaBreakdown contract', () => {
+describe('NVDA 演示数据完整性', () => {
+  it('符合 IdeaBreakdown 结构化数据约定', () => {
     expect(ideaBreakdownSchema.safeParse(nvdaIdeaBreakdown).success).toBe(true);
   });
 
-  it('resolves every evidence source and assumption reference', () => {
+  it('每条证据都能找到对应的来源和假设', () => {
     for (const item of nvdaEvidence) {
-      expect(nvdaSourcesById[item.sourceId], `${item.id} source`).toBeDefined();
+      expect(nvdaSourcesById[item.sourceId], `${item.id} 对应的来源`).toBeDefined();
       for (const assumptionId of item.assumptionIds) {
-        expect(nvdaAssumptionsById[assumptionId], `${item.id} assumption`).toBeDefined();
+        expect(nvdaAssumptionsById[assumptionId], `${item.id} 对应的假设`).toBeDefined();
       }
     }
   });
 
-  it('prevents future-data leakage into the initial research run', () => {
+  it('防止初次研究混入当时尚未公开的数据', () => {
     for (const evidenceId of nvdaResearchRun.evidenceIds) {
       const item = nvdaEvidence.find((entry) => entry.id === evidenceId)!;
       const source = nvdaSourcesById[item.sourceId];
@@ -33,7 +33,7 @@ describe('NVDA demo fixture integrity', () => {
     expect(nvdaResearchRun.evidenceIds).not.toContain('ev-h20-license');
   });
 
-  it('preserves append-only thesis history', () => {
+  it('以只追加方式保留论点历史', () => {
     expect(nvdaThesisVersions.map((version) => version.version)).toEqual([1, 2]);
     expect(nvdaThesisVersions[0].state).toBe('STABLE');
     expect(nvdaThesisVersions[1].state).toBe('WATCH');

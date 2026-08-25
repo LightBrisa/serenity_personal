@@ -1,17 +1,17 @@
 # Serenity
 
-Serenity is an AI-native investment research workspace for turning a raw stock idea into an evidence-based, falsifiable, continuously monitored investment thesis.
+Serenity 是一套个人投资研究工作台，帮助你把一句模糊的股票想法，整理成有证据、可证伪、能持续跟踪的投资论点。
 
-This repository currently implements **Phase 1**: a polished, clickable NVDA vertical slice built with deterministic demo fixtures. It covers the Idea Inbox, editable Idea Breakdown, Research Workspace, persistent Thesis Card, Thesis Monitor, and version history. No screen presents fixture content as live market data, and the application does not provide buy/sell recommendations or trading functionality.
+仓库目前完成了**第一阶段**：以 NVDA 为例，串起想法箱、想法拆解、研究台、投资论点、论点跟踪和版本历史。页面中的内容全部来自固定的演示数据，不是实时行情；项目不提供买卖建议，也不包含交易功能。
 
-## Local development
+## 本地开发
 
 ```bash
 npm install
 npm run dev
 ```
 
-Quality checks:
+提交前检查：
 
 ```bash
 npm run lint
@@ -20,16 +20,16 @@ npm test
 npm run build
 ```
 
-## Architecture
+## 目录说明
 
-- `app/` — route surfaces for the end-to-end product journey
-- `src/components/` — reusable research UI and interactive controls
-- `src/domain/` — product types, validated AI-contract schemas, and deterministic calculations
-- `src/data/` — explicitly labeled, time-bounded NVDA demo fixtures
-- `src/db/` — typed Drizzle schema for the future persistence layer
+- `app/` — 完整研究流程的页面与路由
+- `src/components/` — 可复用的研究界面和交互组件
+- `src/domain/` — 领域类型、结构化数据校验和确定性计算
+- `src/data/` — 标注清楚、带时间边界的 NVDA 演示数据
+- `src/db/` — 为后续持久化准备的 Drizzle 类型化数据结构
 
-The UI reads only from fixtures in Phase 1. Model calls, provider adapters, source ingestion, persistence, and scheduled monitoring begin in Phase 2 and later.
+第一阶段的界面只读取演示数据。模型调用、数据供应商适配、来源采集、持久化和定时跟踪会在后续阶段接入。
 
-## Safety
+## 使用边界
 
-Serenity is a research and reasoning tool, not an investment adviser or trading system. Evidence is labeled by provenance and relation to the thesis. Raw source facts remain separate from AI interpretation, unknowns remain explicit, and thesis history is append-only.
+Serenity 用来整理研究过程，不是投资顾问或交易系统，也不构成任何投资建议。每条证据都会注明来源，以及它与论点之间的关系；来源事实和研究解读分开保存，未知项不会被悄悄补全，历史版本只追加、不覆盖。

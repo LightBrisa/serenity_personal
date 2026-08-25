@@ -2,29 +2,29 @@ import { describe, expect, it } from 'vitest';
 import { percentChange, relationCounts, simpleMovingAverage } from './calculations';
 import type { EvidenceAssessment } from './types';
 
-describe('deterministic financial calculations', () => {
-  it('calculates percentage change from explicit inputs', () => {
+describe('确定性金融计算', () => {
+  it('根据明确的输入计算百分比变化', () => {
     expect(percentChange(100, 125)).toBe(25);
     expect(percentChange(80, 60)).toBe(-25);
   });
 
-  it('rejects an invalid percentage-change baseline', () => {
-    expect(() => percentChange(0, 10)).toThrow(/non-zero start/);
+  it('拒绝无效的百分比变化起点', () => {
+    expect(() => percentChange(0, 10)).toThrow(/起点不能为 0/);
   });
 
-  it('calculates a rolling simple moving average', () => {
+  it('计算滚动简单移动平均', () => {
     expect(simpleMovingAverage([10, 20, 30, 40], 3)).toEqual([20, 30]);
   });
 
-  it('counts evidence relations without inventing a score', () => {
+  it('只统计证据关系，不凭空生成分数', () => {
     const base = {
       sourceId: 'source',
-      title: 'Evidence',
+      title: '证据',
       layer: 'FUNDAMENTALS',
       confidence: 'HIGH',
       assumptionIds: ['assumption'],
-      interpretation: 'Interpretation',
-      limitations: 'Limitations',
+      interpretation: '研究解读',
+      limitations: '局限',
       assessedAt: '2025-02-27T00:00:00.000Z',
     } satisfies Omit<EvidenceAssessment, 'id' | 'relation'>;
     const evidence: EvidenceAssessment[] = [

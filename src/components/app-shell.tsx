@@ -24,19 +24,19 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Idea inbox', href: '/', icon: LayoutGrid, match: (path) => path === '/' || path.startsWith('/idea') },
-  { label: 'Research', href: '/research/nvda', icon: FlaskConical, match: (path) => path.startsWith('/research') },
-  { label: 'Thesis', href: '/thesis/nvda', icon: BookOpenText, match: (path) => path.startsWith('/thesis') },
-  { label: 'Monitor', href: '/monitor/nvda', icon: Telescope, match: (path) => path.startsWith('/monitor'), badge: '2' },
+  { label: '想法箱', href: '/', icon: LayoutGrid, match: (path) => path === '/' || path.startsWith('/idea') },
+  { label: '研究台', href: '/research/nvda', icon: FlaskConical, match: (path) => path.startsWith('/research') },
+  { label: '投资论点', href: '/thesis/nvda', icon: BookOpenText, match: (path) => path.startsWith('/thesis') },
+  { label: '论点跟踪', href: '/monitor/nvda', icon: Telescope, match: (path) => path.startsWith('/monitor'), badge: '2' },
 ];
 
 function pageLabel(pathname: string) {
-  if (pathname.startsWith('/idea')) return ['Idea breakdown', 'Clarify the claim before researching'];
-  if (pathname.startsWith('/research')) return ['Research workspace', 'Investigate the hypothesis from both sides'];
-  if (pathname.includes('/history')) return ['Thesis history', 'What changed, when, and why'];
-  if (pathname.startsWith('/thesis')) return ['Thesis card', 'The persistent case and its falsifiers'];
-  if (pathname.startsWith('/monitor')) return ['Thesis monitor', 'High-materiality changes to assumptions'];
-  return ['Idea inbox', 'Turn a claim into a testable thesis'];
+  if (pathname.startsWith('/idea')) return ['想法拆解', '先把观点说清楚，再开始查证'];
+  if (pathname.startsWith('/research')) return ['研究台', '同时寻找支持和反对的证据'];
+  if (pathname.includes('/history')) return ['论点记录', '什么变了，何时变的，为什么'];
+  if (pathname.startsWith('/thesis')) return ['论点卡', '把依据、风险和证伪条件放在一起'];
+  if (pathname.startsWith('/monitor')) return ['论点跟踪', '只看真正影响关键假设的变化'];
+  return ['想法箱', '把一句判断整理成可验证的投资论点'];
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -51,12 +51,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#173e32] text-sm font-semibold text-[#e5f0df] shadow-[inset_0_0_0_1px_rgb(255_255_255/10%)]">S</span>
             <span>
               <span className="block font-semibold tracking-[-0.02em]">Serenity</span>
-              <span className="block text-[10px] font-medium uppercase tracking-[0.16em] text-[#78817b]">Research OS</span>
+              <span className="block text-[10px] font-medium tracking-[0.12em] text-[#78817b]">个人研究台</span>
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="mt-10 space-y-1">
-            <p className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#8c938e]">Workspace</p>
+          <nav aria-label="主导航" className="mt-10 space-y-1">
+            <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#8c938e]">研究流程</p>
             {navItems.map((item) => {
               const active = item.match(pathname);
               const Icon = item.icon;
@@ -79,19 +79,19 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="mt-8 border-t border-[#e1e3dd] pt-5">
             <Link href="/thesis/nvda/history" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#68716b] transition hover:bg-[#eceee9] hover:text-[#27312b]">
               <ClipboardList size={17} aria-hidden="true" />
-              Decision journal
+              判断记录
             </Link>
           </div>
 
           <div className="mt-auto rounded-2xl border border-[#dfe2da] bg-white/70 p-4">
             <p className="flex items-center gap-2 text-xs font-semibold text-[#334139]">
               <span className="grid h-6 w-6 place-items-center rounded-lg bg-[#e5eae2] text-[#476451]"><Search size={13} /></span>
-              Research discipline
+              研究原则
             </p>
-            <p className="mt-2 text-xs leading-5 text-[#737c76]">Separate what is known, what is claimed, and what is inferred.</p>
+            <p className="mt-2 text-xs leading-5 text-[#737c76]">把事实、表述和推断分开看。</p>
             <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-[#476451]">
               <span className="h-1.5 w-1.5 rounded-full bg-[#cf8d45]" />
-              Demo fixture · not live
+              演示数据 · 非实时
             </div>
           </div>
         </aside>
@@ -107,12 +107,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
               <span className="hidden items-center gap-2 rounded-full border border-[#ddd8ce] bg-[#f8f2e9] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#8a6844] sm:flex">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#cf8d45]" /> Demo
+                <span className="h-1.5 w-1.5 rounded-full bg-[#cf8d45]" /> 演示
               </span>
-              <button type="button" aria-label="Help" className="hidden h-9 w-9 place-items-center rounded-full border border-[#d8dbd4] bg-white text-[#68716b] transition hover:text-[#26322c] sm:grid">
+              <button type="button" aria-label="帮助" className="hidden h-9 w-9 place-items-center rounded-full border border-[#d8dbd4] bg-white text-[#68716b] transition hover:text-[#26322c] sm:grid">
                 <CircleHelp size={16} />
               </button>
-              <button type="button" aria-label="Notifications" className="relative grid h-9 w-9 place-items-center rounded-full border border-[#d8dbd4] bg-white text-[#68716b] transition hover:text-[#26322c]">
+              <button type="button" aria-label="通知" className="relative grid h-9 w-9 place-items-center rounded-full border border-[#d8dbd4] bg-white text-[#68716b] transition hover:text-[#26322c]">
                 <Bell size={16} />
                 <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#c7804e] ring-2 ring-white" />
               </button>
@@ -120,7 +120,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <nav aria-label="Mobile primary" className="sticky top-[72px] z-30 flex overflow-x-auto border-b border-[#dcded6] bg-[#f8f8f4] px-3 lg:hidden">
+          <nav aria-label="移动端主导航" className="sticky top-[72px] z-30 flex overflow-x-auto border-b border-[#dcded6] bg-[#f8f8f4] px-3 lg:hidden">
             {navItems.map((item) => {
               const active = item.match(pathname);
               const Icon = item.icon;

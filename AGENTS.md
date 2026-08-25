@@ -1,51 +1,51 @@
-# Serenity engineering principles
+# Serenity 工程原则
 
-## Product north star
+## 产品目标
 
-Help an ordinary investor turn an external investment idea into an evidence-based, falsifiable, continuously updated investment thesis. The thesis—not the ticker, chart, news feed, or chat—is the primary product object.
+帮助普通投资者把从外部看到的一条投资观点，整理成有证据、可证伪、能持续更新的投资论点。产品的核心对象是投资论点，不是股票代码、走势图、新闻流或聊天窗口。
 
-## Research behavior
+## 研究方式
 
-- Organize work as idea → claim → assumptions → evidence → risks → invalidation → monitoring.
-- Investigate supporting and contradictory evidence deliberately. Never optimize for a bullish conclusion.
-- Keep verified facts, company statements, third-party opinions, market narratives, deterministic calculations, AI inference, and user edits visibly distinct.
-- Every material conclusion must cite evidence. Missing material facts are `UNKNOWN`; never manufacture precision or silently fill gaps.
-- Assess whether evidence `SUPPORTS`, `CHALLENGES`, or is `NEUTRAL` to a named assumption and explain why.
-- Use explainable thesis states only: `STRONG`, `STABLE`, `WATCH`, `WEAKENED`, `INVALIDATED`.
-- Monitor assumptions and invalidation conditions, not generic news volume. Prefer fewer high-materiality events.
-- Preserve thesis versions. Never overwrite what the user previously believed or the evidence available at that time.
+- 按照想法 → 主张 → 假设 → 证据 → 风险 → 失效条件 → 跟踪的顺序组织研究。
+- 主动寻找支持和反对两方面的证据，不能预设看涨结论。
+- 清楚区分已核实事实、公司表述、第三方观点、市场叙事、确定性计算、模型推断和用户修改。
+- 重要结论必须引用证据。缺少关键事实时标记为 `UNKNOWN`，不得虚构精度或悄悄补全空白。
+- 判断证据对具体假设是 `SUPPORTS`、`CHALLENGES` 还是 `NEUTRAL`，并说明理由。
+- 论点状态只使用可解释的 `STRONG`、`STABLE`、`WATCH`、`WEAKENED`、`INVALIDATED`。
+- 跟踪假设和失效条件，不按普通新闻数量制造提醒；宁可少一些，也要保留真正重要的事件。
+- 保留论点的每个版本，不覆盖用户当时的判断和当时可获得的证据。
 
-## Time and data correctness
+## 时间与数据准确性
 
-- Track `published_at`, `available_at`, and `retrieved_at` when applicable.
-- All research runs have an `as_of` timestamp and must exclude information unavailable at that time.
-- Fixture data must be deterministic and unmistakably labeled as demo/not live.
-- Numerical calculations belong in deterministic code; the model may explain but must not invent results.
-- Financial data access goes through provider interfaces. Domain logic must not depend on one vendor.
+- 适用时记录 `published_at`、`available_at` 和 `retrieved_at`。
+- 每次研究都要记录 `as_of` 时间，并排除当时尚未公开的信息。
+- 演示数据必须可重复，并明确标注为演示内容、非实时数据。
+- 数值计算由确定性代码完成；模型可以解释结果，但不能编造结果。
+- 金融数据统一通过供应商接口访问，领域逻辑不能依赖某一家供应商。
 
-## Architecture boundaries
+## 架构边界
 
-- Keep raw source records, normalized evidence, AI assessments, deterministic calculations, and user-edited conclusions as separate types and persistence records.
-- Centralize model access behind an abstraction. Validate every structured model output before persistence and fail visibly on invalid output.
-- Keep the initial application a typed modular monolith. Do not introduce microservices before the product requires them.
-- Prefer one complete vertical slice over shallow breadth across many tickers.
-- Store regression fixtures and eval cases alongside prompt/model changes.
+- 原始来源、标准化证据、模型判断、确定性计算和用户修改后的结论，使用不同的类型和持久化记录。
+- 模型访问统一收口到抽象层。结构化输出写入前必须校验，校验失败时要明确报错。
+- 初期保持类型完备的模块化单体架构；产品没有实际需要时，不引入微服务。
+- 优先做完整的一条研究流程，不急于浅层覆盖大量股票。
+- 提示词或模型发生变化时，同步保存回归演示数据和评估用例。
 
-## Safety boundary
+## 安全边界
 
-- Do not add brokerage credentials, order execution, automated personalized buy/sell recommendations, guaranteed-return language, or trading signals.
-- Prefer language such as “evidence supports,” “evidence challenges,” “uncertainty remains,” and “this assumption should be monitored.”
+- 不得加入券商账户凭据、订单执行、自动化个性买卖建议、保本或保收益表述，以及交易信号。
+- 表述优先使用“证据支持”“证据削弱”“仍有不确定性”“这项假设需要继续跟踪”等措辞。
 
-## UX principles
+## 体验原则
 
-- Calm, professional, analytical, modern, and information-dense without becoming overwhelming.
-- Make citations and evidence provenance prominent.
-- AI belongs inside an observable research workflow; do not make the product a giant chat surface.
-- Avoid casino aesthetics, excessive red/green, meaningless scores, and decorative complexity.
+- 整体应克制、专业、便于分析；信息可以密集，但不能让人无从下手。
+- 引用和证据来源要醒目。
+- 模型能力应放在可检查的研究流程里，不把产品做成一个巨大的聊天框。
+- 避免博彩式视觉、过量红绿色、没有解释的分数和纯装饰性的复杂设计。
 
-## Windows UTF-8 guardrail
+## Windows UTF-8 规则
 
-Before PowerShell, Python, Node, document, Markdown, JSON, CSV, or piped commands that may touch Chinese content or paths, configure UTF-8 explicitly:
+运行可能接触中文内容或路径的 PowerShell、Python、Node、文档、Markdown、JSON、CSV 或管道命令前，先明确配置 UTF-8：
 
 ```powershell
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -53,4 +53,4 @@ $OutputEncoding = [System.Text.UTF8Encoding]::new()
 $env:PYTHONIOENCODING = "utf-8"
 ```
 
-Use explicit UTF-8 when reading or writing text, then read back a sample and stop if `??`, mojibake, or replacement characters appear.
+读写文本时明确指定 UTF-8，写入后抽样读回；如出现 `??`、乱码或替换字符，立即停止。

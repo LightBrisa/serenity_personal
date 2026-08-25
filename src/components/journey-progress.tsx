@@ -2,17 +2,17 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 
 const steps = [
-  { label: 'Idea', href: '/' },
-  { label: 'Breakdown', href: '/idea/nvda' },
-  { label: 'Research', href: '/research/nvda' },
-  { label: 'Thesis', href: '/thesis/nvda' },
-  { label: 'Monitor', href: '/monitor/nvda' },
+  { label: '想法', href: '/' },
+  { label: '拆解', href: '/idea/nvda' },
+  { label: '研究', href: '/research/nvda' },
+  { label: '论点', href: '/thesis/nvda' },
+  { label: '跟踪', href: '/monitor/nvda' },
 ];
 
-export function JourneyProgress({ current }: { current: 'Idea' | 'Breakdown' | 'Research' | 'Thesis' | 'Monitor' }) {
+export function JourneyProgress({ current }: { current: '想法' | '拆解' | '研究' | '论点' | '跟踪' }) {
   const currentIndex = steps.findIndex((step) => step.label === current);
   return (
-    <nav aria-label="Research journey" className="overflow-x-auto rounded-xl border border-[#d9ddd5] bg-[#f8f8f4] px-3">
+    <nav aria-label="研究流程" className="overflow-x-auto rounded-xl border border-[#d9ddd5] bg-[#f8f8f4] px-3">
       <ol className="flex min-w-[580px] items-center">
         {steps.map((step, index) => {
           const complete = index < currentIndex;

@@ -53,7 +53,7 @@ export interface ResearchQuestion {
   assumptionIds: string[];
 }
 
-/** Raw source metadata and source-native fact. No AI judgment belongs here. */
+/** 原始来源元数据和来源中的事实，不在这里存放模型判断。 */
 export interface SourceRecord {
   id: string;
   title: string;
@@ -67,7 +67,7 @@ export interface SourceRecord {
   fixture: true;
 }
 
-/** AI or analyst assessment of a source record against named thesis assumptions. */
+/** 模型或分析师针对具体论点假设，对来源记录所做的判断。 */
 export interface EvidenceAssessment {
   id: string;
   sourceId: string;

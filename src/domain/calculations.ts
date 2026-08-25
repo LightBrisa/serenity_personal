@@ -2,17 +2,17 @@ import type { EvidenceAssessment, EvidenceRelation } from './types';
 
 export function percentChange(start: number, end: number): number {
   if (!Number.isFinite(start) || !Number.isFinite(end) || start === 0) {
-    throw new Error('Percent change requires finite values and a non-zero start.');
+    throw new Error('百分比变化要求起点和终点都是有限数值，且起点不能为 0。');
   }
   return ((end - start) / Math.abs(start)) * 100;
 }
 
 export function simpleMovingAverage(values: number[], window: number): number[] {
   if (!Number.isInteger(window) || window <= 0) {
-    throw new Error('Moving-average window must be a positive integer.');
+    throw new Error('移动平均窗口必须是正整数。');
   }
   if (values.some((value) => !Number.isFinite(value))) {
-    throw new Error('Moving-average inputs must be finite.');
+    throw new Error('移动平均输入必须都是有限数值。');
   }
   if (window > values.length) return [];
 
