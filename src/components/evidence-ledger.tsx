@@ -9,17 +9,17 @@ type RelationFilter = EvidenceRelation | 'ALL';
 type LayerFilter = ResearchLayer | 'ALL';
 
 const relationFilters: { label: string; value: RelationFilter }[] = [
-  { label: '全部证据', value: 'ALL' },
-  { label: '支持', value: 'SUPPORTS' },
-  { label: '削弱', value: 'CHALLENGES' },
-  { label: '中性', value: 'NEUTRAL' },
+  { label: '全部依据', value: 'ALL' },
+  { label: '更有信心', value: 'SUPPORTS' },
+  { label: '更谨慎', value: 'CHALLENGES' },
+  { label: '暂不影响', value: 'NEUTRAL' },
 ];
 
 const layerFilters: { label: string; value: LayerFilter }[] = [
   { label: '全部维度', value: 'ALL' },
-  { label: '基本面', value: 'FUNDAMENTALS' },
-  { label: '信息与情绪', value: 'INFORMATION' },
-  { label: '市场与技术', value: 'MARKET' },
+  { label: '生意与财务', value: 'FUNDAMENTALS' },
+  { label: '客户、竞争与政策', value: 'INFORMATION' },
+  { label: '价格与预期', value: 'MARKET' },
 ];
 
 export function EvidenceLedger({ evidence, sources }: { evidence: EvidenceAssessment[]; sources: SourceRecord[] }) {
@@ -49,7 +49,7 @@ export function EvidenceLedger({ evidence, sources }: { evidence: EvidenceAssess
       <div className="mt-4 space-y-3">
         {visibleEvidence.length === 0 && (
           <div className="grid min-h-48 place-items-center rounded-[18px] border border-dashed border-[#cdd2ca] bg-[#f8f8f4] text-center">
-            <div><SearchX className="mx-auto text-[#94a098]" /><p className="mt-3 text-sm font-semibold">没有符合条件的证据</p><button type="button" onClick={() => { setRelation('ALL'); setLayer('ALL'); }} className="mt-2 text-xs font-semibold text-[#315d47] hover:underline">清除筛选</button></div>
+            <div><SearchX className="mx-auto text-[#94a098]" /><p className="mt-3 text-sm font-semibold">没有符合条件的依据</p><button type="button" onClick={() => { setRelation('ALL'); setLayer('ALL'); }} className="mt-2 text-xs font-semibold text-[#315d47] hover:underline">清除筛选</button></div>
           </div>
         )}
         {visibleEvidence.map((item) => {
@@ -64,11 +64,11 @@ export function EvidenceLedger({ evidence, sources }: { evidence: EvidenceAssess
 
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 <div className="rounded-xl border border-[#dfe2dc] bg-white p-4">
-                  <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.1em] text-[#77817a]"><Link2 size={12} /> 来源事实</div>
+                  <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.1em] text-[#77817a]"><Link2 size={12} /> 原始来源说了什么</div>
                   <p className="mt-2 text-xs leading-5 text-[#59655e]">{source.rawFact}</p>
                 </div>
                 <div className="rounded-xl border border-[#dbe2d9] bg-[#eff3ed] p-4">
-                  <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.1em] text-[#4f6a59]"><span className="grid h-4 w-4 place-items-center rounded bg-[#d9e5d7] text-[9px]">析</span> 研究解读</div>
+                  <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.1em] text-[#4f6a59]"><span className="grid h-4 w-4 place-items-center rounded bg-[#d9e5d7] text-[9px]">析</span> 这对我的判断意味着什么</div>
                   <p className="mt-2 text-xs leading-5 text-[#526057]">{item.interpretation}</p>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export function EvidenceLedger({ evidence, sources }: { evidence: EvidenceAssess
           );
         })}
       </div>
-      <p className="mt-3 text-right text-[11px] text-[#8b928d]">当前显示 {visibleEvidence.length} / {evidence.length} 条证据</p>
+      <p className="mt-3 text-right text-[11px] text-[#8b928d]">当前显示 {visibleEvidence.length} / {evidence.length} 条依据</p>
     </section>
   );
 }

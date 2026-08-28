@@ -7,6 +7,8 @@ import {
   nvdaIdeaBreakdown,
   nvdaResearchRun,
   nvdaSourcesById,
+  nvdaMonitorEvents,
+  nvdaThesis,
   nvdaThesisVersions,
 } from './nvda-fixtures';
 
@@ -33,9 +35,11 @@ describe('NVDA 演示数据完整性', () => {
     expect(nvdaResearchRun.evidenceIds).not.toContain('ev-h20-license');
   });
 
-  it('以只追加方式保留论点历史', () => {
-    expect(nvdaThesisVersions.map((version) => version.version)).toEqual([1, 2]);
+  it('待用户确认的变化不会提前写成新判断', () => {
+    expect(nvdaThesisVersions.map((version) => version.version)).toEqual([1]);
     expect(nvdaThesisVersions[0].state).toBe('STABLE');
-    expect(nvdaThesisVersions[1].state).toBe('WATCH');
+    expect(nvdaThesis.currentVersionId).toBe('thesis-nvda-v1');
+    expect(nvdaMonitorEvents[0].status).toBe('NEW');
+    expect(nvdaMonitorEvents[0].impact.stateAfter).toBe('WATCH');
   });
 });

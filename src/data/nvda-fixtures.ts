@@ -288,7 +288,7 @@ export const nvdaThesis: Thesis = {
   id: 'thesis-nvda-ai-capex',
   ticker: 'NVDA',
   company: '英伟达（NVIDIA）',
-  currentVersionId: 'thesis-nvda-v2',
+  currentVersionId: 'thesis-nvda-v1',
   followed: true,
   createdAt: fixtureMeta.researchAsOf,
   updatedAt: fixtureMeta.currentAsOf,
@@ -329,17 +329,6 @@ export const nvdaThesisVersions: ThesisVersion[] = [
     createdAt: fixtureMeta.researchAsOf,
     asOf: fixtureMeta.researchAsOf,
   },
-  {
-    ...sharedThesis,
-    id: 'thesis-nvda-v2',
-    version: 2,
-    state: 'WATCH',
-    coreThesis: 'AI 基础设施投入仍然支撑 NVIDIA 的需求前景，但新的 H20 出口限制明显削弱了市场准入条件，也增加了近期盈利的不确定性。',
-    challengingEvidenceIds: [...sharedThesis.challengingEvidenceIds, 'ev-h20-license'],
-    changedBecause: '美国新增的 H20 出口许可要求影响了关键的市场准入假设，并带来一笔预计费用。',
-    createdAt: fixtureMeta.currentAsOf,
-    asOf: fixtureMeta.currentAsOf,
-  },
 ];
 
 export const currentNvdaThesisVersion = nvdaThesisVersions.at(-1)!;
@@ -351,7 +340,7 @@ export const nvdaMonitorEvents: MonitorEvent[] = [
     summary: 'NVIDIA 披露，向中国及相关目的地出口 H20 须取得美国许可，且要求不设期限；公司预计 2026 财年第一季度相关费用最高约为 55 亿美元。',
     occurredAt: '2025-04-15T21:22:59.000Z',
     sourceId: 'src-h20-8k',
-    status: 'REVIEWED',
+    status: 'NEW',
     impact: {
       id: 'impact-h20-license', eventId: 'event-h20-license', thesisId: nvdaThesis.id, relation: 'CHALLENGES', materiality: 'HIGH',
       affectedAssumptionIds: ['assumption-access', 'assumption-margin'],
@@ -370,7 +359,7 @@ export const nvdaMonitorEvents: MonitorEvent[] = [
       id: 'impact-q1-upcoming', eventId: 'event-q1-results', thesisId: nvdaThesis.id, relation: 'NEUTRAL', materiality: 'HIGH',
       affectedAssumptionIds: ['assumption-blackwell', 'assumption-margin'],
       explanation: '这将直接检验 Blackwell 快速增长能否与盈利能力企稳同时出现。本演示数据不预设结果。',
-      stateBefore: 'WATCH', stateAfter: 'WATCH', assessedAt: fixtureMeta.currentAsOf,
+      stateBefore: 'STABLE', stateAfter: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
     },
   },
   {
@@ -384,7 +373,7 @@ export const nvdaMonitorEvents: MonitorEvent[] = [
       id: 'impact-ai-diffusion', eventId: 'event-ai-diffusion', thesisId: nvdaThesis.id, relation: 'NEUTRAL', materiality: 'MEDIUM',
       affectedAssumptionIds: ['assumption-access'],
       explanation: '该规则可能改变国际市场准入条件，但在跟踪截止时，实际影响仍不明确。',
-      stateBefore: 'WATCH', stateAfter: 'WATCH', assessedAt: fixtureMeta.currentAsOf,
+      stateBefore: 'STABLE', stateAfter: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
     },
   },
 ];

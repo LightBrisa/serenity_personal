@@ -9,7 +9,7 @@ const relationStyles: Record<EvidenceRelation, string> = {
 
 export function RelationBadge({ relation }: { relation: EvidenceRelation }) {
   const Icon = relation === 'SUPPORTS' ? Check : relation === 'CHALLENGES' ? AlertTriangle : Minus;
-  const label = { SUPPORTS: '支持', CHALLENGES: '削弱', NEUTRAL: '中性' }[relation];
+  const label = { SUPPORTS: '让我更有信心', CHALLENGES: '让我更谨慎', NEUTRAL: '暂不影响' }[relation];
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] ${relationStyles[relation]}`}>
       <Icon size={11} strokeWidth={2.4} aria-hidden="true" /> {label}
@@ -26,7 +26,7 @@ const stateStyles: Record<ThesisState, string> = {
 };
 
 export function StateBadge({ state, large = false }: { state: ThesisState; large?: boolean }) {
-  const label = { STRONG: '较强', STABLE: '稳定', WATCH: '需观察', WEAKENED: '转弱', INVALIDATED: '已失效' }[state];
+  const label = { STRONG: '证据较充分', STABLE: '目前站得住', WATCH: '需要重看', WEAKENED: '已明显转弱', INVALIDATED: '已不成立' }[state];
   return (
     <span className={`inline-flex items-center gap-2 rounded-full border font-bold tracking-[0.1em] ${stateStyles[state]} ${large ? 'px-3.5 py-2 text-[11px]' : 'px-2.5 py-1 text-[10px]'}`}>
       <span className="h-1.5 w-1.5 rounded-full bg-current" /> {label}
@@ -35,9 +35,9 @@ export function StateBadge({ state, large = false }: { state: ThesisState; large
 }
 
 export const layerLabels: Record<ResearchLayer, string> = {
-  FUNDAMENTALS: '基本面',
-  INFORMATION: '信息与情绪',
-  MARKET: '市场与技术面',
+  FUNDAMENTALS: '生意与财务',
+  INFORMATION: '客户、竞争与政策',
+  MARKET: '价格与预期',
 };
 
 export function LayerBadge({ layer }: { layer: ResearchLayer }) {
@@ -62,8 +62,8 @@ export function Confidence({ value }: { value: EvidenceConfidence }) {
   const filled = value === 'HIGH' ? 3 : value === 'MEDIUM' ? 2 : value === 'LOW' ? 1 : 0;
   const label = { HIGH: '高', MEDIUM: '中', LOW: '低', UNKNOWN: '未知' }[value];
   return (
-    <span className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.07em] text-[#818984]" title={`可信度：${label}`}>
-      可信度
+    <span className="inline-flex items-center gap-2 text-[10px] font-semibold tracking-[0.07em] text-[#818984]" title={`依据可靠性：${label}`}>
+      依据可靠性
       <span className="flex gap-0.5">
         {[0, 1, 2].map((index) => <span key={index} className={`h-1.5 w-3 rounded-full ${index < filled ? 'bg-[#667e6d]' : 'bg-[#d8dcd6]'}`} />)}
       </span>

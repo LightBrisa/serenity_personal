@@ -3,14 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Bell,
   BookOpenText,
-  CircleHelp,
   ClipboardList,
-  FlaskConical,
-  LayoutGrid,
+  Home,
+  ListChecks,
   Search,
-  Telescope,
+  Sparkles,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -20,23 +18,23 @@ interface NavItem {
   href: string;
   icon: LucideIcon;
   match: (path: string) => boolean;
-  badge?: string;
 }
 
 const navItems: NavItem[] = [
-  { label: '想法箱', href: '/', icon: LayoutGrid, match: (path) => path === '/' || path.startsWith('/idea') },
-  { label: '研究台', href: '/research/nvda', icon: FlaskConical, match: (path) => path.startsWith('/research') },
-  { label: '投资论点', href: '/thesis/nvda', icon: BookOpenText, match: (path) => path.startsWith('/thesis') },
-  { label: '论点跟踪', href: '/monitor/nvda', icon: Telescope, match: (path) => path.startsWith('/monitor'), badge: '2' },
+  { label: '今天', href: '/', icon: Home, match: (path) => path === '/' || path.startsWith('/idea') },
+  { label: '我的判断', href: '/thesis/nvda', icon: BookOpenText, match: (path) => path === '/thesis/nvda' },
+  { label: '待核对', href: '/research/nvda', icon: ListChecks, match: (path) => path.startsWith('/research') },
+  { label: '待我确认', href: '/monitor/nvda', icon: Sparkles, match: (path) => path.startsWith('/monitor') },
+  { label: '修改记录', href: '/thesis/nvda/history', icon: ClipboardList, match: (path) => path.includes('/history') },
 ];
 
 function pageLabel(pathname: string) {
-  if (pathname.startsWith('/idea')) return ['想法拆解', '先把观点说清楚，再开始查证'];
-  if (pathname.startsWith('/research')) return ['研究台', '同时寻找支持和反对的证据'];
-  if (pathname.includes('/history')) return ['论点记录', '什么变了，何时变的，为什么'];
-  if (pathname.startsWith('/thesis')) return ['论点卡', '把依据、风险和证伪条件放在一起'];
-  if (pathname.startsWith('/monitor')) return ['论点跟踪', '只看真正影响关键假设的变化'];
-  return ['想法箱', '把一句判断整理成可验证的投资论点'];
+  if (pathname.startsWith('/idea')) return ['先说清楚', '确认自己真正想弄清的问题'];
+  if (pathname.startsWith('/research')) return ['待核对', '看清依据、反证和仍然未知的部分'];
+  if (pathname.includes('/history')) return ['修改记录', '回看我何时、为什么改变过判断'];
+  if (pathname.startsWith('/thesis')) return ['我的判断', '我现在怎么看，以及什么会让我改主意'];
+  if (pathname.startsWith('/monitor')) return ['待我确认', '变化已经找出，最后决定由我来做'];
+  return ['今天', '先处理最值得我重新判断的事'];
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -49,14 +47,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         <aside className="sticky top-0 hidden h-screen w-[246px] shrink-0 border-r border-[#dcded6] bg-[#f8f8f4] px-5 py-6 lg:flex lg:flex-col">
           <Link href="/" className="flex items-center gap-3 rounded-xl px-2 outline-none focus-visible:ring-2 focus-visible:ring-[#6f956e]">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#173e32] text-sm font-semibold text-[#e5f0df] shadow-[inset_0_0_0_1px_rgb(255_255_255/10%)]">S</span>
-            <span>
-              <span className="block font-semibold tracking-[-0.02em]">Serenity</span>
-              <span className="block text-[10px] font-medium tracking-[0.12em] text-[#78817b]">个人研究台</span>
-            </span>
+              <span>
+                <span className="block font-semibold tracking-[-0.02em]">Serenity</span>
+              <span className="block text-[10px] font-medium tracking-[0.12em] text-[#78817b]">帮我想清楚</span>
+              </span>
           </Link>
 
           <nav aria-label="主导航" className="mt-10 space-y-1">
-            <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#8c938e]">研究流程</p>
+            <p className="mb-3 px-3 text-[10px] font-semibold tracking-[0.12em] text-[#8c938e]">我的研究</p>
             {navItems.map((item) => {
               const active = item.match(pathname);
               const Icon = item.icon;
@@ -70,18 +68,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 >
                   <Icon size={17} strokeWidth={active ? 2.2 : 1.8} aria-hidden="true" />
                   <span>{item.label}</span>
-                  {item.badge && <span className="ml-auto rounded-full bg-[#d9e5d4] px-2 py-0.5 text-[10px] font-bold text-[#315d47]">{item.badge}</span>}
                 </Link>
               );
             })}
           </nav>
-
-          <div className="mt-8 border-t border-[#e1e3dd] pt-5">
-            <Link href="/thesis/nvda/history" className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[#68716b] transition hover:bg-[#eceee9] hover:text-[#27312b]">
-              <ClipboardList size={17} aria-hidden="true" />
-              判断记录
-            </Link>
-          </div>
 
           <div className="mt-auto rounded-2xl border border-[#dfe2da] bg-white/70 p-4">
             <p className="flex items-center gap-2 text-xs font-semibold text-[#334139]">
@@ -105,18 +95,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <p className="hidden truncate text-xs text-[#7d857f] sm:block">{subtitle}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2">
               <span className="hidden items-center gap-2 rounded-full border border-[#ddd8ce] bg-[#f8f2e9] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.1em] text-[#8a6844] sm:flex">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#cf8d45]" /> 演示
               </span>
-              <button type="button" aria-label="帮助" className="hidden h-9 w-9 place-items-center rounded-full border border-[#d8dbd4] bg-white text-[#68716b] transition hover:text-[#26322c] sm:grid">
-                <CircleHelp size={16} />
-              </button>
-              <button type="button" aria-label="通知" className="relative grid h-9 w-9 place-items-center rounded-full border border-[#d8dbd4] bg-white text-[#68716b] transition hover:text-[#26322c]">
-                <Bell size={16} />
-                <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#c7804e] ring-2 ring-white" />
-              </button>
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-[#dce5dc] text-xs font-bold text-[#315443]">AR</span>
             </div>
           </header>
 
