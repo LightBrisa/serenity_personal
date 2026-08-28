@@ -1,10 +1,8 @@
-import Link from 'next/link';
-import { ArrowRight, CircleHelp, Clock3, Lightbulb, ShieldAlert, TriangleAlert } from 'lucide-react';
+import { CircleHelp, Lightbulb, ShieldAlert, TriangleAlert } from 'lucide-react';
+import { ResearchDecisionContext, ResearchDecisionIntro, ResearchNextAction } from '@/src/components/decision-experience';
 import { EvidenceLedger } from '@/src/components/evidence-ledger';
-import { SavedDraftText, thesisStorageKey } from '@/src/components/saved-draft';
 import { FixtureNotice, Unknown, layerLabels } from '@/src/components/ui';
 import {
-  fixtureMeta,
   nvdaEvidence,
   nvdaIdeaBreakdown,
   nvdaResearchQuestions,
@@ -27,28 +25,11 @@ export default function ResearchWorkspacePage() {
   return (
     <div className="mx-auto max-w-[1200px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold tracking-[0.08em] text-[#7c857f]"><span>NVDA · 待核对</span><span className="text-[#b3b7b3]">/</span><span>依据截至 2025 年 2 月 27 日</span></div>
-          <h1 className="mt-3 max-w-3xl font-serif text-[clamp(2.1rem,4vw,3.45rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">这条判断，现在站得住吗？</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">先看结论和最大分歧。想核对细节时，再展开下面的原始依据。</p>
-        </div>
+        <ResearchDecisionIntro />
         <FixtureNotice compact />
       </div>
 
-      <section className="mt-8 rounded-[24px] border border-[#cfd8cf] bg-[#edf2eb] p-5 sm:p-7">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div>
-            <p className="text-[10px] font-bold tracking-[0.08em] text-[#5d7665]">我在验证这句话</p>
-            <p className="mt-3 max-w-3xl font-serif text-xl leading-8 text-[#304039]"><SavedDraftText storageKey={thesisStorageKey} fallback={nvdaIdeaBreakdown.coreThesis} /></p>
-            <Link href="/idea/nvda" className="mt-4 inline-flex text-xs font-semibold text-[#315d47] hover:underline">这不是我的意思，回去修改</Link>
-          </div>
-          <div className="rounded-2xl border border-[#d9caa9] bg-[#f7edd9] p-5">
-            <p className="text-[10px] font-bold tracking-[0.08em] text-[#8a642f]">目前怎么看</p>
-            <p className="mt-3 text-base font-semibold leading-7 text-[#4b3d2b]">需求和产品放量有实际数据支撑，但利润率、竞争和市场准入都要求保留意见。</p>
-            <p className="mt-3 text-xs leading-5 text-[#77684f]">所以现在可以继续研究，还不能把它当成确定结论。</p>
-          </div>
-        </div>
-      </section>
+      <ResearchDecisionContext fallbackThesis={nvdaIdeaBreakdown.coreThesis} />
 
       <section className="mt-6 grid gap-4 lg:grid-cols-3">
         <div className="rounded-[20px] border border-[#d8e1d6] bg-[#f1f5ef] p-5">
@@ -98,10 +79,7 @@ export default function ResearchWorkspacePage() {
         <div className="mt-6"><EvidenceLedger evidence={researchEvidence} sources={nvdaSources} /></div>
       </details>
 
-      <section className="mt-7 flex flex-col gap-4 rounded-[20px] border border-[#cbd6cc] bg-[#eaf0e8] p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-        <div><p className="text-sm font-semibold text-[#314138]">材料已经够你形成一版暂时判断。</p><p className="mt-1 flex items-center gap-2 text-xs leading-5 text-[#6c786f]"><Clock3 size={13} />研究截止：{new Date(fixtureMeta.researchAsOf).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })}</p></div>
-        <Link href="/thesis/nvda" className="inline-flex min-w-max items-center justify-center gap-2 rounded-xl bg-[#173e32] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_6px_16px_rgb(23_62_50/18%)] transition hover:bg-[#214c3e]">看我现在怎么判断 <ArrowRight size={15} /></Link>
-      </section>
+      <ResearchNextAction />
     </div>
   );
 }

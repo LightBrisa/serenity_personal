@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { AlertOctagon, ArrowRight, CalendarDays, CircleHelp, Eye, History, Lightbulb, ShieldAlert } from 'lucide-react';
 import { CausalChain } from '@/src/components/causal-chain';
-import { ThesisDecisionCard, ThesisDecisionStatus } from '@/src/components/decision-experience';
+import { ActiveThesisBody, CurrentThesisStatement, ThesisDecisionCard, ThesisDecisionStatus, ThesisPageIntro } from '@/src/components/decision-experience';
+import { SafeLink as Link } from '@/src/components/safe-link';
 import { AssumptionStatus, FixtureNotice, RelationBadge, SourceTypeLabel, Unknown } from '@/src/components/ui';
 import {
   currentNvdaThesisVersion,
@@ -31,10 +31,7 @@ export default function ThesisCardPage() {
   return (
     <div className="mx-auto max-w-[1160px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · 我的判断</p>
-          <h1 className="mt-3 max-w-3xl font-serif text-[clamp(2.1rem,4vw,3.45rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">我现在怎么看，以及什么会让我改主意。</h1>
-        </div>
+        <ThesisPageIntro />
         <FixtureNotice compact />
       </div>
 
@@ -49,12 +46,13 @@ export default function ThesisCardPage() {
           </div>
 
           <div className="mt-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-            <div><p className="text-[10px] font-bold tracking-[0.08em] text-[#64766a]">我目前怎么判断</p><p className="mt-3 font-serif text-[clamp(1.4rem,2.6vw,2.05rem)] leading-[1.35] tracking-[-0.02em] text-[#2b3931]">{currentNvdaThesisVersion.coreThesis}</p></div>
+            <CurrentThesisStatement coreThesis={currentNvdaThesisVersion.coreThesis} />
             <ThesisDecisionCard />
           </div>
         </header>
 
-        <div className="p-5 sm:p-7">
+        <ActiveThesisBody>
+          <div className="p-5 sm:p-7">
           <section className="grid gap-6 xl:grid-cols-2">
             <div>
               <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.08em] text-[#59715f]"><Lightbulb size={13} />我为什么这样判断</div>
@@ -91,7 +89,8 @@ export default function ThesisCardPage() {
             </div>
             <Link href="/research/nvda" className="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-[#315d47] hover:underline">查看全部原始依据 <ArrowRight size={12} /></Link>
           </details>
-        </div>
+          </div>
+        </ActiveThesisBody>
 
         <footer className="flex flex-col gap-4 border-t border-[#dbe0d9] bg-[#f1f3ee] p-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
           <div className="flex items-center gap-3 text-xs text-[#738078]"><CalendarDays size={15} /><span>第一次写下于 2025 年 2 月 27 日 · 当时的材料仍保留</span></div>

@@ -141,7 +141,6 @@ export interface ThesisImpact {
   affectedAssumptionIds: string[];
   explanation: string;
   stateBefore: ThesisState;
-  stateAfter: ThesisState;
   assessedAt: ISODateTime;
 }
 

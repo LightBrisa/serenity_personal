@@ -41,7 +41,6 @@ export const thesisImpactSchema = z.object({
   affectedAssumptionIds: z.array(z.string().min(1)).min(1),
   explanation: z.string().min(1),
   stateBefore: z.enum(['STRONG', 'STABLE', 'WATCH', 'WEAKENED', 'INVALIDATED']),
-  stateAfter: z.enum(['STRONG', 'STABLE', 'WATCH', 'WEAKENED', 'INVALIDATED']),
   assessedAt: z.string().datetime(),
 });
 

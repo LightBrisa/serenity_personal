@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, History, ShieldAlert } from 'lucide-react';
 import { LocalDecisionHistory } from '@/src/components/decision-experience';
+import { SafeLink as Link } from '@/src/components/safe-link';
 import { FixtureNotice, StateBadge } from '@/src/components/ui';
 import { nvdaThesisVersions } from '@/src/data/nvda-fixtures';
 
@@ -12,9 +12,9 @@ export default function ThesisHistoryPage() {
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <Link href="/thesis/nvda" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#315d47] hover:underline"><ArrowLeft size={13} />返回我的判断</Link>
-          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · 修改记录</p>
-          <h1 className="mt-3 font-serif text-[clamp(2.1rem,4vw,3.4rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">我什么时候改过判断，为什么。</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">新材料不会覆盖旧想法。只有当你明确作出选择，才会多一条记录。</p>
+          <p className="mt-5 text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · 处理记录</p>
+          <h1 className="mt-3 font-serif text-[clamp(2.1rem,4vw,3.4rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">我什么时候处理过判断，为什么。</h1>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">新材料不会覆盖旧想法。改变结论会留下修改记录；先补证据只记为处理中。</p>
         </div>
         <FixtureNotice compact />
       </div>

@@ -40,6 +40,6 @@ describe('NVDA 演示数据完整性', () => {
     expect(nvdaThesisVersions[0].state).toBe('STABLE');
     expect(nvdaThesis.currentVersionId).toBe('thesis-nvda-v1');
     expect(nvdaMonitorEvents[0].status).toBe('NEW');
-    expect(nvdaMonitorEvents[0].impact.stateAfter).toBe('WATCH');
+    expect(nvdaMonitorEvents[0].impact).not.toHaveProperty('stateAfter');
   });
 });

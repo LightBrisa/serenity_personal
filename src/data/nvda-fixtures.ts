@@ -345,7 +345,7 @@ export const nvdaMonitorEvents: MonitorEvent[] = [
       id: 'impact-h20-license', eventId: 'event-h20-license', thesisId: nvdaThesis.id, relation: 'CHALLENGES', materiality: 'HIGH',
       affectedAssumptionIds: ['assumption-access', 'assumption-margin'],
       explanation: '这项变化把已知的监管风险转化为立即生效的产品限制和预计财务费用。它削弱了投资论点，但仅凭这一点，还不能说明全球 AI 需求或 Blackwell 的采用趋势已经逆转。',
-      stateBefore: 'STABLE', stateAfter: 'WATCH', assessedAt: fixtureMeta.currentAsOf,
+      stateBefore: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
     },
   },
   {
@@ -359,7 +359,7 @@ export const nvdaMonitorEvents: MonitorEvent[] = [
       id: 'impact-q1-upcoming', eventId: 'event-q1-results', thesisId: nvdaThesis.id, relation: 'NEUTRAL', materiality: 'HIGH',
       affectedAssumptionIds: ['assumption-blackwell', 'assumption-margin'],
       explanation: '这将直接检验 Blackwell 快速增长能否与盈利能力企稳同时出现。本演示数据不预设结果。',
-      stateBefore: 'STABLE', stateAfter: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
+      stateBefore: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
     },
   },
   {
@@ -373,7 +373,7 @@ export const nvdaMonitorEvents: MonitorEvent[] = [
       id: 'impact-ai-diffusion', eventId: 'event-ai-diffusion', thesisId: nvdaThesis.id, relation: 'NEUTRAL', materiality: 'MEDIUM',
       affectedAssumptionIds: ['assumption-access'],
       explanation: '该规则可能改变国际市场准入条件，但在跟踪截止时，实际影响仍不明确。',
-      stateBefore: 'STABLE', stateAfter: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
+      stateBefore: 'STABLE', assessedAt: fixtureMeta.currentAsOf,
     },
   },
 ];

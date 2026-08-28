@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { ArrowRight, CalendarClock, CircleHelp, ExternalLink, Eye, FilterX, ShieldAlert } from 'lucide-react';
 import { DecisionReview, DecisionStatusPanel, MonitorDecisionIntro } from '@/src/components/decision-experience';
+import { SafeLink as Link } from '@/src/components/safe-link';
 import { AssumptionStatus, FixtureNotice, RelationBadge, SourceTypeLabel, StateBadge } from '@/src/components/ui';
 import {
   currentNvdaThesisVersion,
@@ -52,7 +52,7 @@ export default function ThesisMonitorPage() {
                 })}
               </div>
             </div>
-            <div className="rounded-2xl border border-[#d9ddd5] bg-[#f3f4f0] p-5">
+            <div id="evidence-gaps" className="rounded-2xl border border-[#d9ddd5] bg-[#f3f4f0] p-5">
               <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.08em] text-[#6f7972]"><CircleHelp size={13} />还缺什么才能下结论</div>
               <ul className="mt-4 space-y-3 text-xs leading-5 text-[#66716a]"><li>• H20 许可最终是否获得，以及可恢复多少收入。</li><li>• 55 亿美元预计费用与实际费用的差距。</li><li>• 中国以外客户的需求能否抵消这项影响。</li></ul>
             </div>

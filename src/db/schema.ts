@@ -126,6 +126,5 @@ export const thesisImpacts = sqliteTable('thesis_impacts', {
   affectedAssumptionIdsJson: text('affected_assumption_ids_json').notNull(),
   explanation: text('explanation').notNull(),
   stateBefore: text('state_before').notNull(),
-  stateAfter: text('state_after').notNull(),
   assessedAt: text('assessed_at').notNull(),
 });

@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { SafeLink as Link } from './safe-link';
 import { usePathname } from 'next/navigation';
 import {
   BookOpenText,
@@ -23,17 +23,17 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: '今天', href: '/', icon: Home, match: (path) => path === '/' || path.startsWith('/idea') },
   { label: '我的判断', href: '/thesis/nvda', icon: BookOpenText, match: (path) => path === '/thesis/nvda' },
-  { label: '待核对', href: '/research/nvda', icon: ListChecks, match: (path) => path.startsWith('/research') },
-  { label: '待我确认', href: '/monitor/nvda', icon: Sparkles, match: (path) => path.startsWith('/monitor') },
-  { label: '修改记录', href: '/thesis/nvda/history', icon: ClipboardList, match: (path) => path.includes('/history') },
+  { label: '判断依据', href: '/research/nvda', icon: ListChecks, match: (path) => path.startsWith('/research') },
+  { label: '处理变化', href: '/monitor/nvda', icon: Sparkles, match: (path) => path.startsWith('/monitor') },
+  { label: '处理记录', href: '/thesis/nvda/history', icon: ClipboardList, match: (path) => path.includes('/history') },
 ];
 
 function pageLabel(pathname: string) {
   if (pathname.startsWith('/idea')) return ['先说清楚', '确认自己真正想弄清的问题'];
-  if (pathname.startsWith('/research')) return ['待核对', '看清依据、反证和仍然未知的部分'];
-  if (pathname.includes('/history')) return ['修改记录', '回看我何时、为什么改变过判断'];
-  if (pathname.startsWith('/thesis')) return ['我的判断', '我现在怎么看，以及什么会让我改主意'];
-  if (pathname.startsWith('/monitor')) return ['待我确认', '变化已经找出，最后决定由我来做'];
+  if (pathname.startsWith('/research')) return ['判断依据', '回看当时的依据、反证和未知'];
+  if (pathname.includes('/history')) return ['处理记录', '回看我何时、为什么处理过判断'];
+  if (pathname.startsWith('/thesis')) return ['我的判断', '回看当前结论、原判断和修改条件'];
+  if (pathname.startsWith('/monitor')) return ['处理变化', '看清影响，再决定如何处理'];
   return ['今天', '先处理最值得我重新判断的事'];
 }
 

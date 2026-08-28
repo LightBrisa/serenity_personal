@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { ArrowRight, CircleHelp, Clock3, FileText, Lightbulb, ShieldAlert } from 'lucide-react';
-import { HomeDecisionTask } from '@/src/components/decision-experience';
+import { HomeDecisionTask, HomeThesisHeading, HomeThesisStatement } from '@/src/components/decision-experience';
 import { IdeaCapture } from '@/src/components/idea-capture';
+import { SafeLink as Link } from '@/src/components/safe-link';
 import { FixtureNotice } from '@/src/components/ui';
 import {
   currentNvdaThesisVersion,
@@ -23,10 +23,7 @@ export default function Home() {
 
       <section className="mt-12">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-semibold tracking-[0.1em] text-[#7d857f]">我的 NVDA 判断</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-0.025em]">上次我是这样想的</h2>
-          </div>
+          <HomeThesisHeading />
           <div className="flex items-center gap-2 text-[11px] text-[#8a918c]"><Clock3 size={12} />依据截至 2025 年 2 月 27 日</div>
         </div>
 
@@ -34,7 +31,7 @@ export default function Home() {
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-3xl">
               <div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#e0e8de] text-sm font-bold text-[#28533f]">NV</span><div><p className="font-semibold">{nvdaThesis.company}</p><p className="text-xs text-[#7c857f]">纳斯达克 · {nvdaThesis.ticker}</p></div></div>
-              <p className="mt-5 font-serif text-xl leading-8 text-[#344039]">{currentNvdaThesisVersion.coreThesis}</p>
+              <HomeThesisStatement coreThesis={currentNvdaThesisVersion.coreThesis} />
             </div>
             <Link href="/thesis/nvda" className="inline-flex min-w-max items-center gap-2 text-xs font-semibold text-[#315d47] hover:underline">看完整判断 <ArrowRight size={13} /></Link>
           </div>
