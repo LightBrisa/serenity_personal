@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { ArrowRight, Check, CircleHelp, RotateCcw } from 'lucide-react';
 import { useState, useSyncExternalStore } from 'react';
+import type { ThesisState } from '@/src/domain/types';
+import { StateBadge } from './ui';
 
 const decisionStorageKey = 'serenity-personal:nvda:decision';
 const decisionEventName = 'serenity-personal:decision-updated';
@@ -69,15 +71,144 @@ export function CurrentDecisionIndicator({ compact = false }: { compact?: boolea
   if (!decision) {
     return <span className={`inline-flex items-center gap-1.5 rounded-full border border-[#dec69c] bg-[#f5ead5] font-bold text-[#8a642f] ${compact ? 'px-2.5 py-1 text-[10px]' : 'px-3.5 py-2 text-[11px]'}`}><CircleHelp size={12} />待我确认</span>;
   }
+  if (decision.choice === 'GATHER') {
+    return <span className={`inline-flex items-center gap-1.5 rounded-full border border-[#dec69c] bg-[#f5ead5] font-bold text-[#8a642f] ${compact ? 'px-2.5 py-1 text-[10px]' : 'px-3.5 py-2 text-[11px]'}`}><CircleHelp size={12} />先补证据</span>;
+  }
   return <span className={`inline-flex items-center gap-1.5 rounded-full border border-[#bfd2c1] bg-[#e2eee2] font-bold text-[#315d47] ${compact ? 'px-2.5 py-1 text-[10px]' : 'px-3.5 py-2 text-[11px]'}`}><Check size={12} />{decision.label}</span>;
 }
 
-function SavedDecisionReview({ decision }: { decision: LocalDecision }) {
+export function HomeDecisionTask({ eventSummary }: { eventSummary: string }) {
+  const decision = useLocalDecision();
+
+  if (decision) {
+    const gathering = decision.choice === 'GATHER';
+    return (
+      <section className="mt-8 overflow-hidden rounded-[26px] border border-[#cbd8cc] bg-[#edf3ea] shadow-[0_22px_60px_rgb(48_72_55/8%)]">
+        <div className="grid gap-7 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:p-10">
+          <div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#bfd2c1] bg-[#e2eee2] px-2.5 py-1 text-[10px] font-bold text-[#315d47]"><Check size={12} />今天这件事已经处理</span>
+            <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.2rem,4.7vw,4.2rem)] leading-[1.02] tracking-[-0.04em] text-[#22342a]">{gathering ? '你决定先补证据，再回来判断。' : '你已经处理了 H20 变化。'}</h1>
+            <p className="mt-5 max-w-2xl text-[15px] leading-7 text-[#607067]">你选择了“{decision.label}”。你写下的理由是：{decision.reason}</p>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <Link href={gathering ? '/monitor/nvda' : '/thesis/nvda/history'} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#173e32] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#214c3e]">{gathering ? '看看还缺什么' : '查看这次修改记录'} <ArrowRight size={15} /></Link>
+              <Link href="/thesis/nvda" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#bdcabf] bg-white/60 px-5 py-3 text-sm font-semibold text-[#315d47] transition hover:bg-white/90">回看我现在的判断</Link>
+            </div>
+          </div>
+          <aside className="rounded-[20px] border border-[#cad6cb] bg-white/55 p-5">
+            <p className="text-[10px] font-bold tracking-[0.09em] text-[#6c7f72]">现在怎么记</p>
+            {decision.stateAfter ? <div className="mt-3"><StateBadge state={decision.stateAfter} large /></div> : <p className="mt-3 text-sm font-semibold leading-6 text-[#405047]">原判断暂时保留，这件事转入补证据。</p>}
+            <div className="mt-5 border-t border-[#d8e0d8] pt-4">
+              <p className="text-[10px] font-bold tracking-[0.08em] text-[#7b897f]">这次处理的对象</p>
+              <p className="mt-2 text-xs leading-5 text-[#6c7971]">{eventSummary}</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="rounded-[22px] border border-[#cbd6cc] bg-[#edf2eb] p-5 sm:p-6">
+    <section className="mt-8 overflow-hidden rounded-[26px] border border-[#d8c9a9] bg-[#f5ead5] shadow-[0_22px_60px_rgb(80_66_43/8%)]">
+      <div className="grid gap-7 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:p-10">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full bg-[#d9ae72] px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] text-[#5f4525]">今天有 1 件事值得你看</span>
+            <CurrentDecisionIndicator compact />
+          </div>
+          <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.2rem,4.7vw,4.2rem)] leading-[1.02] tracking-[-0.04em] text-[#2f281f]">一条新限制，可能会改变你对 NVDA 的判断。</h1>
+          <p className="mt-5 max-w-2xl text-[15px] leading-7 text-[#6f604b]">{eventSummary}</p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <Link href="/monitor/nvda" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#3f3325] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#554633]">先看它影响了什么 <ArrowRight size={15} /></Link>
+            <Link href="/thesis/nvda" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#cdbb9d] bg-white/55 px-5 py-3 text-sm font-semibold text-[#6e5636] transition hover:bg-white/80">回看我原来的判断</Link>
+          </div>
+        </div>
+        <aside className="rounded-[20px] border border-[#dfcfb4] bg-white/48 p-5">
+          <p className="text-[10px] font-bold tracking-[0.09em] text-[#8a7354]">为什么和我有关</p>
+          <p className="mt-3 text-sm font-semibold leading-6 text-[#4a3d2e]">它直接影响“海外市场仍能顺利转化为收入”这项前提。</p>
+          <div className="mt-5 border-t border-[#dfd0b8] pt-4">
+            <p className="text-[10px] font-bold tracking-[0.08em] text-[#8a7354]">还不能直接得出什么</p>
+            <p className="mt-2 text-xs leading-5 text-[#74644f]">单凭这件事，还不能说明全球 AI 需求或 Blackwell 的采用已经逆转。</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+  );
+}
+
+export function MonitorDecisionIntro() {
+  const decision = useLocalDecision();
+  if (!decision) {
+    return (
+      <div>
+        <p className="text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · 待我确认</p>
+        <h1 className="mt-3 max-w-3xl font-serif text-[clamp(2.1rem,4vw,3.45rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">有一件新变化，需要你决定怎么处理。</h1>
+        <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">这里不会自动替你改判断。先看发生了什么、影响哪条前提、还缺什么，再由你选择。</p>
+      </div>
+    );
+  }
+
+  const gathering = decision.choice === 'GATHER';
+  return (
+    <div>
+      <p className="text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · {gathering ? '补证据中' : '已处理'}</p>
+      <h1 className="mt-3 max-w-3xl font-serif text-[clamp(2.1rem,4vw,3.45rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">{gathering ? '你决定先补证据，再回来处理这件事。' : '这件变化已经处理过，可以随时重新判断。'}</h1>
+      <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">你上次选择了“{decision.label}”，理由是：{decision.reason}</p>
+    </div>
+  );
+}
+
+export function DecisionStatusPanel() {
+  const decision = useLocalDecision();
+  return (
+    <div className="rounded-[22px] border border-[#d8c9a9] bg-[#f5ead5] p-5">
+      <p className="text-[10px] font-bold tracking-[0.08em] text-[#8a642f]">这件事现在的处理状态</p>
+      <div className="mt-4"><CurrentDecisionIndicator /></div>
+      <p className="mt-4 text-xs leading-5 text-[#74644f]">{!decision ? '在你明确选择前，原判断不会被覆盖，也不会生成新记录。' : decision.choice === 'GATHER' ? '原判断暂时保留；等材料补齐后，再回来决定是否需要修改。' : '你的选择已经写入修改记录；原判断仍然保留，可以随时回看。'}</p>
+    </div>
+  );
+}
+
+export function ThesisDecisionStatus({ fallbackState }: { fallbackState: ThesisState }) {
+  const decision = useLocalDecision();
+  const state = decision?.stateAfter ?? fallbackState;
+  return (
+    <div className="flex flex-wrap gap-4 lg:justify-end">
+      <div><p className="mb-1.5 text-[9px] font-bold tracking-[0.08em] text-[#88908a]">{decision?.stateAfter ? '当前判断' : '原判断'}</p><StateBadge state={state} large /></div>
+      <div><p className="mb-1.5 text-[9px] font-bold tracking-[0.08em] text-[#88908a]">H20 变化</p><CurrentDecisionIndicator /></div>
+    </div>
+  );
+}
+
+export function ThesisDecisionCard() {
+  const decision = useLocalDecision();
+  if (!decision) {
+    return (
+      <div className="rounded-2xl border border-[#dacda9] bg-[#f5ead5] p-4">
+        <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.08em] text-[#8a642f]"><CircleHelp size={13} />有一件事还在等我确认</div>
+        <p className="mt-2 text-xs leading-5 text-[#776449]">新的 H20 出口许可要求已经带来预计费用，但还不足以单独否定全球需求。</p>
+        <Link href="/monitor/nvda" className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#7b5d31] hover:underline">去处理这次变化 <ArrowRight size={12} /></Link>
+      </div>
+    );
+  }
+
+  const gathering = decision.choice === 'GATHER';
+  return (
+    <div className={`rounded-2xl border p-4 ${gathering ? 'border-[#dacda9] bg-[#f5ead5]' : 'border-[#c7d6c9] bg-[#e9f0e7]'}`}>
+      <div className={`flex items-center gap-2 text-[10px] font-bold tracking-[0.08em] ${gathering ? 'text-[#8a642f]' : 'text-[#4f7059]'}`}>{gathering ? <CircleHelp size={13} /> : <Check size={13} />}{gathering ? '这件事已转入补证据' : '这件事已经处理'}</div>
+      <p className={`mt-2 text-xs font-semibold leading-5 ${gathering ? 'text-[#776449]' : 'text-[#506158]'}`}>你选择了“{decision.label}”。</p>
+      <p className={`mt-2 text-xs leading-5 ${gathering ? 'text-[#776449]' : 'text-[#68766e]'}`}>{decision.reason}</p>
+      <Link href={gathering ? '/monitor/nvda' : '/thesis/nvda/history'} className={`mt-3 inline-flex items-center gap-1.5 text-xs font-semibold hover:underline ${gathering ? 'text-[#7b5d31]' : 'text-[#315d47]'}`}>{gathering ? '查看还缺什么' : '查看修改记录'} <ArrowRight size={12} /></Link>
+    </div>
+  );
+}
+
+function SavedDecisionReview({ decision }: { decision: LocalDecision }) {
+  const gathering = decision.choice === 'GATHER';
+  return (
+    <section className={`rounded-[22px] border p-5 sm:p-6 ${gathering ? 'border-[#d8c9a9] bg-[#f5ead5]' : 'border-[#cbd6cc] bg-[#edf2eb]'}`}>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-[10px] font-bold tracking-[0.08em] text-[#58705f]">这次判断已经记下</p>
+          <p className={`text-[10px] font-bold tracking-[0.08em] ${gathering ? 'text-[#8a642f]' : 'text-[#58705f]'}`}>{gathering ? '这件事已转入补证据' : '这次判断已经记下'}</p>
           <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em]">{decision.label}</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-[#59655e]">{decision.reason}</p>
         </div>

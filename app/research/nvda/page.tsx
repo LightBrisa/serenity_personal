@@ -87,7 +87,7 @@ export default function ResearchWorkspacePage() {
         </div>
       </section>
 
-      <details className="group mt-8 rounded-[22px] border border-[#d9ddd5] bg-[#fafaf7] p-5 sm:p-6" open>
+      <details className="group mt-8 rounded-[22px] border border-[#d9ddd5] bg-[#fafaf7] p-5 sm:p-6">
         <summary className="cursor-pointer list-none marker:hidden">
           <div className="flex items-end justify-between gap-4">
             <div><p className="text-[10px] font-bold tracking-[0.08em] text-[#7d857f]">需要时再核对</p><h2 className="mt-2 text-xl font-semibold tracking-[-0.02em]">查看全部原始依据</h2><p className="mt-2 text-xs leading-5 text-[#747d77]">每条都把来源原文和它对判断的意义分开。</p></div>

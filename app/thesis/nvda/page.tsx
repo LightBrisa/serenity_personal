@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { AlertOctagon, ArrowRight, CalendarDays, CircleHelp, Eye, History, Lightbulb, ShieldAlert } from 'lucide-react';
 import { CausalChain } from '@/src/components/causal-chain';
-import { CurrentDecisionIndicator } from '@/src/components/decision-experience';
-import { AssumptionStatus, FixtureNotice, RelationBadge, SourceTypeLabel, StateBadge, Unknown } from '@/src/components/ui';
+import { ThesisDecisionCard, ThesisDecisionStatus } from '@/src/components/decision-experience';
+import { AssumptionStatus, FixtureNotice, RelationBadge, SourceTypeLabel, Unknown } from '@/src/components/ui';
 import {
   currentNvdaThesisVersion,
   nvdaAssumptions,
@@ -45,19 +45,12 @@ export default function ThesisCardPage() {
               <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-[#dbe7da] text-lg font-bold text-[#28533f]">NV</span>
               <div><h2 className="text-xl font-semibold tracking-[-0.02em]">{nvdaThesis.company}</h2><p className="mt-1 text-xs text-[#758079]">纳斯达克 · {nvdaThesis.ticker} · 我想看 12–18 个月</p></div>
             </div>
-            <div className="flex flex-wrap gap-4 lg:justify-end">
-              <div><p className="mb-1.5 text-[9px] font-bold tracking-[0.08em] text-[#88908a]">原判断</p><StateBadge state={currentNvdaThesisVersion.state} large /></div>
-              <div><p className="mb-1.5 text-[9px] font-bold tracking-[0.08em] text-[#88908a]">H20 变化</p><CurrentDecisionIndicator /></div>
-            </div>
+            <ThesisDecisionStatus fallbackState={currentNvdaThesisVersion.state} />
           </div>
 
           <div className="mt-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
             <div><p className="text-[10px] font-bold tracking-[0.08em] text-[#64766a]">我目前怎么判断</p><p className="mt-3 font-serif text-[clamp(1.4rem,2.6vw,2.05rem)] leading-[1.35] tracking-[-0.02em] text-[#2b3931]">{currentNvdaThesisVersion.coreThesis}</p></div>
-            <div className="rounded-2xl border border-[#dacda9] bg-[#f5ead5] p-4">
-              <div className="flex items-center gap-2 text-[10px] font-bold tracking-[0.08em] text-[#8a642f]"><CircleHelp size={13} />有一件事还在等我确认</div>
-              <p className="mt-2 text-xs leading-5 text-[#776449]">新的 H20 出口许可要求已经带来预计费用，但还不足以单独否定全球需求。</p>
-              <Link href="/monitor/nvda" className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-[#7b5d31] hover:underline">去处理这次变化 <ArrowRight size={12} /></Link>
-            </div>
+            <ThesisDecisionCard />
           </div>
         </header>
 

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, CalendarClock, CircleHelp, ExternalLink, Eye, FilterX, ShieldAlert } from 'lucide-react';
-import { CurrentDecisionIndicator, DecisionReview } from '@/src/components/decision-experience';
+import { DecisionReview, DecisionStatusPanel, MonitorDecisionIntro } from '@/src/components/decision-experience';
 import { AssumptionStatus, FixtureNotice, RelationBadge, SourceTypeLabel, StateBadge } from '@/src/components/ui';
 import {
   currentNvdaThesisVersion,
@@ -17,11 +17,7 @@ export default function ThesisMonitorPage() {
   return (
     <div className="mx-auto max-w-[1160px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · 待我确认</p>
-          <h1 className="mt-3 max-w-3xl font-serif text-[clamp(2.1rem,4vw,3.45rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">有一件新变化，需要你决定怎么处理。</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">这里不会自动替你改判断。先看发生了什么、影响哪条前提、还缺什么，再由你选择。</p>
-        </div>
+        <MonitorDecisionIntro />
         <FixtureNotice compact />
       </div>
 
@@ -31,11 +27,7 @@ export default function ThesisMonitorPage() {
           <p className="mt-4 font-serif text-xl leading-8 text-[#344039]">{currentNvdaThesisVersion.coreThesis}</p>
           <Link href="/thesis/nvda" className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#315d47] hover:underline">回看完整判断 <ArrowRight size={13} /></Link>
         </div>
-        <div className="rounded-[22px] border border-[#d8c9a9] bg-[#f5ead5] p-5">
-          <p className="text-[10px] font-bold tracking-[0.08em] text-[#8a642f]">这件事现在的处理状态</p>
-          <div className="mt-4"><CurrentDecisionIndicator /></div>
-          <p className="mt-4 text-xs leading-5 text-[#74644f]">在你明确选择前，原判断不会被覆盖，也不会生成新版本。</p>
-        </div>
+        <DecisionStatusPanel />
       </section>
 
       <article className="mt-7 overflow-hidden rounded-[24px] border border-[#e0c8b9] bg-[#faf7f3]">
@@ -67,10 +59,8 @@ export default function ThesisMonitorPage() {
           </div>
 
           <div className="mt-5 rounded-2xl border border-[#d9ddd5] bg-[#f5f6f2] p-5">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-              <div><p className="text-[10px] font-bold tracking-[0.08em] text-[#7d857f]">如果只按现有材料调整</p><div className="mt-3 flex items-center gap-3"><StateBadge state={primaryEvent.impact.stateBefore} /><ArrowRight size={15} className="text-[#8a918c]" /><StateBadge state={primaryEvent.impact.stateAfter} /></div></div>
-              <p className="max-w-md text-xs leading-5 text-[#747d77]"><strong className="text-[#4d5951]">这只是建议，不是自动结论。</strong> 原因是市场准入和短期利润率已经受影响，但全球需求与 Blackwell 采用还没有被否定。</p>
-            </div>
+            <p className="text-[10px] font-bold tracking-[0.08em] text-[#7d857f]">为什么这里只提醒，不替你给答案</p>
+            <p className="mt-3 max-w-3xl text-xs leading-5 text-[#747d77]">市场准入和短期利润率已经受影响，但全球需求与 Blackwell 采用还没有被否定。系统只把冲突和未知整理出来；要不要改判断、改到什么程度，由你选择。</p>
           </div>
 
           <div className="mt-5 flex flex-col gap-3 border-t border-[#e1e4de] pt-4 sm:flex-row sm:items-center sm:justify-between">

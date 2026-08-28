@@ -325,7 +325,7 @@ export const nvdaThesisVersions: ThesisVersion[] = [
     version: 1,
     state: 'STABLE',
     coreThesis: nvdaIdeaBreakdown.coreThesis,
-    changedBecause: '根据研究截止时已经整理的证据，形成了第一版投资论点。',
+    changedBecause: '数据中心收入与云厂商投入支撑需求仍强；但 Blackwell 切换期毛利率承压、客户自研芯片和市场准入风险都要求保留意见。',
     createdAt: fixtureMeta.researchAsOf,
     asOf: fixtureMeta.researchAsOf,
   },

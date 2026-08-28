@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, CircleHelp, Clock3, FileText, Lightbulb, ShieldAlert } from 'lucide-react';
-import { CurrentDecisionIndicator } from '@/src/components/decision-experience';
+import { HomeDecisionTask } from '@/src/components/decision-experience';
 import { IdeaCapture } from '@/src/components/idea-capture';
 import { FixtureNotice } from '@/src/components/ui';
 import {
@@ -19,30 +19,7 @@ export default function Home() {
     <div className="mx-auto max-w-[1160px] px-5 pb-16 pt-9 sm:px-8 lg:px-10 lg:pt-12">
       <FixtureNotice compact />
 
-      <section className="mt-8 overflow-hidden rounded-[26px] border border-[#d8c9a9] bg-[#f5ead5] shadow-[0_22px_60px_rgb(80_66_43/8%)]">
-        <div className="grid gap-7 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:p-10">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[#d9ae72] px-2.5 py-1 text-[10px] font-bold tracking-[0.08em] text-[#5f4525]">今天有 1 件事值得你看</span>
-              <CurrentDecisionIndicator compact />
-            </div>
-            <h1 className="mt-5 max-w-3xl font-serif text-[clamp(2.2rem,4.7vw,4.2rem)] leading-[1.02] tracking-[-0.04em] text-[#2f281f]">一条新限制，可能会改变你对 NVDA 的判断。</h1>
-            <p className="mt-5 max-w-2xl text-[15px] leading-7 text-[#6f604b]">{latestEvent.summary}</p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link href="/monitor/nvda" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#3f3325] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#554633]">先看它影响了什么 <ArrowRight size={15} /></Link>
-              <Link href="/thesis/nvda" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#cdbb9d] bg-white/55 px-5 py-3 text-sm font-semibold text-[#6e5636] transition hover:bg-white/80">回看我原来的判断</Link>
-            </div>
-          </div>
-          <aside className="rounded-[20px] border border-[#dfcfb4] bg-white/48 p-5">
-            <p className="text-[10px] font-bold tracking-[0.09em] text-[#8a7354]">为什么和我有关</p>
-            <p className="mt-3 text-sm font-semibold leading-6 text-[#4a3d2e]">它直接影响“海外市场仍能顺利转化为收入”这项前提。</p>
-            <div className="mt-5 border-t border-[#dfd0b8] pt-4">
-              <p className="text-[10px] font-bold tracking-[0.08em] text-[#8a7354]">还不能直接得出什么</p>
-              <p className="mt-2 text-xs leading-5 text-[#74644f]">单凭这件事，还不能说明全球 AI 需求或 Blackwell 的采用已经逆转。</p>
-            </div>
-          </aside>
-        </div>
-      </section>
+      <HomeDecisionTask eventSummary={latestEvent.summary} />
 
       <section className="mt-12">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">

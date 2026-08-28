@@ -20,7 +20,7 @@ export default function IdeaBreakdownPage() {
         <div>
           <p className="text-xs font-semibold tracking-[0.08em] text-[#7c857f]">NVDA · 先说清楚</p>
           <h1 className="mt-3 max-w-3xl font-serif text-[clamp(2.1rem,4vw,3.35rem)] leading-[1.05] tracking-[-0.035em] text-[#17251f]">先确认：你真正想弄清什么？</h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">我先把这段话整理成几个需要成立的前提。你可以直接修改，再决定先查什么。</p>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#6f7872]">下面用一套固定示例，把这段话展开成需要成立的前提。你可以修改核心判断，再决定先查什么。</p>
         </div>
         <FixtureNotice compact />
       </div>
