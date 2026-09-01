@@ -9,7 +9,6 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['src/**/*.test.ts'],
-    exclude: ['src/**/*.live.test.ts'],
+    include: ['src/ai/openai-impact-provider.live.test.ts'],
   },
 });

@@ -17,6 +17,9 @@ interface LocalDecision {
   reason: string;
   stateAfter: 'STABLE' | 'WATCH' | 'INVALIDATED' | null;
   decidedAt: string;
+  evidenceGaps: string[];
+  analysisRunId: string | null;
+  analysisSource: 'MODEL' | 'OFFLINE_FIXTURE' | 'UNSPECIFIED';
 }
 
 const choices: Array<{
@@ -30,19 +33,23 @@ const choices: Array<{
   { value: 'INVALIDATE', label: '这条判断已不成立', description: '这次变化已经击穿原来的关键前提。' },
 ];
 
-const evidenceGaps = [
+const defaultEvidenceGaps = [
   'H20 许可最终是否获得，以及可以恢复多少收入。',
   '55 亿美元预计费用与实际费用会相差多少。',
   '中国以外客户的需求能否抵消这项影响。',
 ] as const;
 
-function parseDecision(value: string) {
+function parseDecision(value: string): LocalDecision | null {
   try {
     if (!value) return null;
     const parsed = JSON.parse(value) as Partial<LocalDecision> | null;
     if (!parsed || typeof parsed.reason !== 'string' || typeof parsed.decidedAt !== 'string') return null;
     const selected = choices.find((item) => item.value === parsed.choice);
     if (!selected) return null;
+    const storedGaps = Array.isArray(parsed.evidenceGaps) ? parsed.evidenceGaps : null;
+    const parsedGaps = storedGaps
+      ? storedGaps.filter((item): item is string => typeof item === 'string' && item.trim().length > 0).slice(0, 6)
+      : [];
 
     return {
       choice: selected.value,
@@ -50,6 +57,11 @@ function parseDecision(value: string) {
       reason: parsed.reason,
       stateAfter: getDecisionOutcome(selected.value).stateAfter,
       decidedAt: parsed.decidedAt,
+      evidenceGaps: storedGaps ? parsedGaps : [...defaultEvidenceGaps],
+      analysisRunId: typeof parsed.analysisRunId === 'string' ? parsed.analysisRunId : null,
+      analysisSource: parsed.analysisSource === 'MODEL' || parsed.analysisSource === 'OFFLINE_FIXTURE'
+        ? parsed.analysisSource
+        : 'UNSPECIFIED',
     };
   } catch {
     return null;
@@ -262,7 +274,7 @@ export function ResearchDecisionContext({ fallbackThesis }: { fallbackThesis: st
           {!decision && <p className="mt-3 text-xs leading-5 text-[#77684f]">所以现在可以继续研究，还不能把它当成确定结论。</p>}
           {gathering && (
             <ul className="mt-4 space-y-2 border-t border-[#e3d3b8] pt-4 text-xs leading-5 text-[#77684f]">
-              {evidenceGaps.map((item) => <li key={item}>• {item}</li>)}
+              {decision.evidenceGaps.length === 0 ? <li>本次分析没有列出具体缺口，请自行补充。</li> : decision.evidenceGaps.map((item) => <li key={item}>• {item}</li>)}
             </ul>
           )}
         </div>
@@ -452,11 +464,11 @@ function SavedDecisionReview({ decision }: { decision: LocalDecision }) {
       {gathering && (
         <div id="gather-next-step" className="mt-5 rounded-xl border border-[#dfcfb4] bg-white/55 p-4">
           <p className="text-[10px] font-bold tracking-[0.08em] text-[#8a642f]">补齐这些材料，再回来决定</p>
-          <ul className="mt-3 space-y-2 text-xs leading-5 text-[#74644f]">{evidenceGaps.map((item) => <li key={item}>• {item}</li>)}</ul>
+          <ul className="mt-3 space-y-2 text-xs leading-5 text-[#74644f]">{decision.evidenceGaps.length === 0 ? <li>本次分析没有列出具体缺口，请自行补充。</li> : decision.evidenceGaps.map((item) => <li key={item}>• {item}</li>)}</ul>
         </div>
       )}
       <div className="mt-5 flex flex-col gap-3 border-t border-[#d9dfd8] pt-5 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-[11px] leading-5 text-[#7a837d]">{gathering ? '这是一条处理中记录，不是判断修改；原判断仍然保留。' : '这是历史情境演示；记录只保存在当前浏览器。'}</p>
+        <p className="text-[11px] leading-5 text-[#7a837d]">{gathering ? '这是一条处理中记录，不是判断修改；原判断仍然保留。' : '这是历史情境演示；记录只保存在当前浏览器。'} {decision.analysisSource === 'MODEL' ? '本次参考了真实模型整理草稿。' : decision.analysisSource === 'OFFLINE_FIXTURE' ? '本次参考了明确标注的离线预置分析。' : ''}</p>
         {gathering ? (
           <button type="button" onClick={clearDecision} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#173e32] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#214c3e]">材料够了，重新做决定 <ArrowRight size={15} /></button>
         ) : (
@@ -467,12 +479,32 @@ function SavedDecisionReview({ decision }: { decision: LocalDecision }) {
   );
 }
 
-export function DecisionReview() {
+export function DecisionReview({
+  evidenceGaps = [...defaultEvidenceGaps],
+  analysisRunId = null,
+  analysisSource = 'UNSPECIFIED',
+  analysisReady = true,
+}: {
+  evidenceGaps?: string[];
+  analysisRunId?: string | null;
+  analysisSource?: LocalDecision['analysisSource'];
+  analysisReady?: boolean;
+}) {
   const existing = useLocalDecision();
   const [choice, setChoice] = useState<DecisionChoice | null>(null);
   const [reason, setReason] = useState('');
 
   if (existing) return <SavedDecisionReview decision={existing} />;
+
+  if (!analysisReady) {
+    return (
+      <section className="rounded-[22px] border border-dashed border-[#c8cec7] bg-[#f8f8f4] p-5 sm:p-6">
+        <p className="text-[10px] font-bold tracking-[0.08em] text-[#7d857f]">人的决定留在最后</p>
+        <h2 className="mt-2 text-lg font-semibold text-[#3b4840]">先把来源事实和原判断对照清楚</h2>
+        <p className="mt-2 max-w-2xl text-xs leading-5 text-[#747d77]">模型整理成功，或你明确加载离线预置示例后，这里才会开放判断选项。系统不会提前替你选择。</p>
+      </section>
+    );
+  }
 
   const save = () => {
     const selected = choices.find((item) => item.value === choice);
@@ -484,6 +516,9 @@ export function DecisionReview() {
       reason: reason.trim(),
       stateAfter: outcome.stateAfter,
       decidedAt: '2025-04-16T12:00:00.000Z',
+      evidenceGaps: evidenceGaps.slice(0, 6),
+      analysisRunId,
+      analysisSource,
     });
   };
 
@@ -541,7 +576,7 @@ export function LocalDecisionHistory() {
           <p className="text-[10px] font-bold tracking-[0.08em] text-[#7d857f]">我为什么还不下结论</p>
           <p className="mt-2 text-sm leading-6 text-[#4f5953]">{decision.reason}</p>
         </div>
-        <p className="mt-4 text-[11px] leading-5 text-[#7f786d]">这是一条操作记录，不是判断修改；原判断保持不变。</p>
+        <p className="mt-4 text-[11px] leading-5 text-[#7f786d]">这是一条操作记录，不是判断修改；原判断保持不变。{decision.analysisSource === 'MODEL' ? '当时参考了真实模型整理草稿。' : decision.analysisSource === 'OFFLINE_FIXTURE' ? '当时参考了离线预置分析。' : ''}</p>
         <Link href="/monitor/nvda#evidence-gaps" className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[#7b5d31] hover:underline">看看还缺什么 <ArrowRight size={13} /></Link>
       </article>
     );
@@ -557,7 +592,7 @@ export function LocalDecisionHistory() {
         <p className="text-[10px] font-bold tracking-[0.08em] text-[#7d857f]">我当时的理由</p>
         <p className="mt-2 text-sm leading-6 text-[#4f5953]">{decision.reason}</p>
       </div>
-      <p className="mt-4 text-[11px] leading-5 text-[#7f786d]">本地演示记录 · 原判断仍可在下方回看</p>
+      <p className="mt-4 text-[11px] leading-5 text-[#7f786d]">本地演示记录 · 原判断仍可在下方回看 · {decision.analysisSource === 'MODEL' ? '参考了真实模型整理草稿' : decision.analysisSource === 'OFFLINE_FIXTURE' ? '参考了离线预置分析' : '分析来源未记录'}</p>
     </article>
   );
 }

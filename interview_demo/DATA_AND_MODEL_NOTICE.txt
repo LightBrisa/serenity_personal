@@ -1,0 +1,11 @@
+Serenity Personal · 数据与模型边界
+====================================
+
+1. Demo 使用 NVIDIA / SEC 等公开来源构成的固定历史快照，研究时点为 2025-02-27，变化评估时点为 2025-04-16；该 fixture 于 2026 年回溯重建，不声称 2025 年已经完成本地抓取，也不是实时行情或实时研究。
+2. 00_START_HERE.html 中的影响分析是离线预置回归样例，本次不会调用 OpenAI 或任何外部服务。
+3. 离线样例与在线模型共用同一结构化数据合同；它只能整理 relation、materiality、受影响前提、证据缺口和限制，不能生成用户的 KEEP / WATCH / GATHER / INVALIDATE 选择。
+4. 在线仓库的模型调用只在服务端读取 OPENAI_API_KEY，使用 Responses API、Structured Outputs、store:false、超时和零自动重试；浏览器不接触密钥。
+5. 本包不包含 API Key、.env、账号、Cookie、Authorization header、数据库、Git 元数据、node_modules、源码、日志、真实模型请求/响应原文或生产配置。
+6. 原始来源链接仅作为用户主动点击的参考；离线主流程不会自动访问这些链接。
+7. Serenity 是个人研究决策支持工具，不是投资顾问或交易系统，不构成投资建议。
+8. 真实模型是否已跑通，只以 05_VERIFICATION.json 的 liveModelSmoke 字段为准；NOT_RUN 不能解读为通过。
