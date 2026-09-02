@@ -4,15 +4,23 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { expect, it } from 'vitest';
-import { analyzeImpact } from './impact-analysis';
+import { impactAnalysisResultSchema } from './impact-analysis';
+import { createImpactPostHandler } from './impact-route';
 import { validImpactInput } from './impact-test-fixtures';
-import { createOpenAIImpactProvider } from './openai-impact-provider';
 
 const liveEnabled = process.env.RUN_MODEL_SMOKE === '1' && Boolean(process.env.OPENAI_API_KEY?.trim());
 const liveIt = liveEnabled ? it : it.skip;
 
-liveIt('真实 OpenAI Responses API 返回通过 schema 和引用校验的影响分析', async () => {
-  const result = await analyzeImpact(validImpactInput, createOpenAIImpactProvider());
+liveIt('真实 OpenAI Responses API 穿过 HTTP 边界并返回通过校验的影响分析', async () => {
+  const response = await createImpactPostHandler()(new Request('http://localhost/api/ai/impact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(validImpactInput),
+  }));
+
+  expect(response.status).toBe(200);
+  expect(response.headers.get('Cache-Control')).toBe('no-store');
+  const result = impactAnalysisResultSchema.parse(await response.json());
 
   expect(result.meta.provider).toBe('openai');
   expect(result.meta.analysisRunId).toMatch(/^resp_/);

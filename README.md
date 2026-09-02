@@ -8,6 +8,8 @@ Serenity 是一套个人投资研究工具，帮助你把外部听来的股票�
 
 ## 本地开发
 
+本地运行使用 Node 24 或更高版本。
+
 ```bash
 npm install
 npm run dev
@@ -37,12 +39,14 @@ npm run build
 
 ```powershell
 $env:RUN_MODEL_SMOKE='1'
-$env:OPENAI_API_KEY='your_key_here'
 npm run test:model:live
 ```
 
 本仓库不保存真实 Key；本地和生产 smoke 应分别执行并记录结果。
+命令会从被 Git 忽略的 `.env.local` 读取 Key；进程环境中已经存在的值仍然优先。
 命令成功后会生成与当前干净 Git revision、prompt 版本和 schema 哈希绑定的 `work/verification/live-model-smoke.json`；后续 Demo 打包会自动校验并带入这份报告。缺少 Key、工作区不干净、调用失败或报告缺失时都不会生成 VERIFIED 结论。
+
+如果本机已经设置 `HTTPS_PROXY` 或 `HTTP_PROXY`，`dev`、`start` 的 Node 启动进程和真实 smoke 会自动启用 Node 24 的内置环境代理。代理地址不会写入报告、日志或 Demo 包；Cloudflare Worker 路由和浏览器代码不引入 Node 代理实现，端到端路由仍需单独实测。
 
 当前 API 路由没有账户身份、每用户费用配额或持久化限流，因此不能仅凭同源请求检查就把带 Key 的端点公开到公网。公开启用真实模型前，至少需要用 Cloudflare Access 或产品账户保护站点，并配置服务端速率/费用门槛；在此之前，生产环境应保持不配置 Key，真实 smoke 只在受控本地环境执行。
 

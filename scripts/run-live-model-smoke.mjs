@@ -1,8 +1,21 @@
 import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, rmSync } from 'node:fs';
 import path from 'node:path';
+import { loadEnvFile } from 'node:process';
+import { isLiveModelSmokeRequested, nodeChildEnvironment } from './node-env-proxy.mjs';
 
-if (process.env.RUN_MODEL_SMOKE !== '1' || !process.env.OPENAI_API_KEY?.trim()) {
+const liveRequested = isLiveModelSmokeRequested();
+const localEnvPath = path.join(process.cwd(), '.env.local');
+if (existsSync(localEnvPath)) {
+  try {
+    loadEnvFile(localEnvPath);
+  } catch {
+    console.error('Unable to load the local environment file.');
+    process.exit(2);
+  }
+}
+
+if (!liveRequested || !process.env.OPENAI_API_KEY?.trim()) {
   console.error('Live model smoke was NOT RUN. Set RUN_MODEL_SMOKE=1 and OPENAI_API_KEY first.');
   process.exit(2);
 }
@@ -25,7 +38,7 @@ const result = spawnSync(process.execPath, [
   '--config',
   'vitest.live.config.ts',
 ], {
-  env: process.env,
+  env: nodeChildEnvironment(),
   stdio: 'inherit',
 });
 
